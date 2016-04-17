@@ -6,4 +6,4 @@ Based on the Icosahedron for Processing by Ira Greenberg (https://processing.org
 An implementation of the five Platonic Solids, with the additional possibility of drawing polihedra vertices with custom radius.
 Some examples:
 
-![solids sample](https://raw.githubusercontent.com/jpcarrascal/ProcessingPlatonicSolids/master/sample.jpg =500x)
+<img src="https://raw.githubusercontent.com/jpcarrascal/ProcessingPlatonicSolids/master/sample.jpg" alt="solids sample" width="500">
