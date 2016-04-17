@@ -1,39 +1,10 @@
-abstract class PlatonicSolid{
+class Icosahedron {
+  // icosahedron
   float x, y, z;
   float radius;
   float vertexRadius;
   boolean showFaces;
   int currentColor;
-
-  PlatonicSolid(){
-  }
-  
-  PlatonicSolid(float radius, float vertexRadius, boolean showFaces){
-    this.radius = radius;
-    this.vertexRadius = vertexRadius;
-    this.showFaces = showFaces;
-    init();
-  }
-
-  void vertexSphere(float x, float y, float z, float r)
-  {
-    pushMatrix();
-    translate(x,y,z);
-    sphere(r);
-    popMatrix();
-  }
-
-  // must be implemented in subclasses
-  abstract void init();
-  abstract void create();
-}
-
-
-
-
-class Icosahedron extends PlatonicSolid{
-
-  // icosahedron
   PVector topPoint;
   PVector[] topPent = new PVector[5];
   PVector bottomPoint;
@@ -182,13 +153,25 @@ class Icosahedron extends PlatonicSolid{
     }
   }
 
+  void vertexSphere(float x, float y, float z, float r)
+  {
+    pushMatrix();
+    translate(x,y,z);
+    sphere(r);
+    popMatrix();
+  }
+
 }
 
 
-class Tetrahedron extends PlatonicSolid{
+class Tetrahedron{
 
   // Tetrahedron
-  float radius = 150;
+  float x, y, z;
+  float radius;
+  float vertexRadius;
+  boolean showFaces;
+  int currentColor;
   float a;
   PVector[] vert = new PVector[4];
   int[][] faces;
@@ -255,20 +238,24 @@ class Tetrahedron extends PlatonicSolid{
     }
   }
 
-  void rotZ(float theta){
+  void vertexSphere(float x, float y, float z, float r)
+  {
+    pushMatrix();
+    translate(x,y,z);
+    sphere(r);
+    popMatrix();
   }
 
-  void rotX(float theta){
-  }
-
-  void rotY(float theta){
-  }
 }
 
-class Hexahedron extends PlatonicSolid{
+class Hexahedron{
 
   // Tetrahedron
-  float radius = 150;
+  float x, y, z;
+  float radius;
+  float vertexRadius;
+  boolean showFaces;
+  int currentColor;
   float a;
   PVector[] vert = new PVector[8];
   int[][] faces;
@@ -347,20 +334,24 @@ class Hexahedron extends PlatonicSolid{
     }
   }
 
-  void rotZ(float theta){
+  void vertexSphere(float x, float y, float z, float r)
+  {
+    pushMatrix();
+    translate(x,y,z);
+    sphere(r);
+    popMatrix();
   }
 
-  void rotX(float theta){
-  }
-
-  void rotY(float theta){
-  }
 }
 
-class Octahedron extends PlatonicSolid{
+class Octahedron{
 
   // Octahedron
-  float radius = 150;
+  float x, y, z;
+  float radius;
+  float vertexRadius;
+  boolean showFaces;
+  int currentColor;
   float a;
   PVector[] vert = new PVector[6];
   int[][] faces;
@@ -437,12 +428,24 @@ class Octahedron extends PlatonicSolid{
     }
   }
 
+  void vertexSphere(float x, float y, float z, float r)
+  {
+    pushMatrix();
+    translate(x,y,z);
+    sphere(r);
+    popMatrix();
+  }
+
 }
 
-class Dodecahedron extends PlatonicSolid{
+class Dodecahedron{
 
   // Dodecahedron
-  float radius = 150;
+  float x, y, z;
+  float radius;
+  float vertexRadius;
+  boolean showFaces;
+  int currentColor;
   float a,b,c;
   PVector[] vert;
   int[][] faces;
@@ -539,6 +542,14 @@ class Dodecahedron extends PlatonicSolid{
       for(int i=0;i<20;i++)
         vertexSphere(vert[i].x,vert[i].y,vert[i].z,vertexRadius);
     }
+  }
+
+  void vertexSphere(float x, float y, float z, float r)
+  {
+    pushMatrix();
+    translate(x,y,z);
+    sphere(r);
+    popMatrix();
   }
 
 }
