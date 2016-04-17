@@ -120,9 +120,10 @@ class Icosahedron extends Shape3D{
     init();
   }
 
-  Icosahedron(PVector v, float radius){
+  Icosahedron(PVector v, float radius, float vr){
     super(v);
     this.radius = radius;
+    this.vr = vr;
     init();
   }
 
@@ -288,9 +289,10 @@ class Tetrahedron extends Shape3D{
     init();
   }
 
-  Tetrahedron(PVector v, float radius){
+  Tetrahedron(PVector v, float radius, float vr){
     super(v);
     this.radius = radius;
+    this.vr = vr;
     init();
   }
 
@@ -349,9 +351,10 @@ class Hexahedron extends Shape3D{
     init();
   }
 
-  Hexahedron(PVector v, float radius){
+  Hexahedron(PVector v, float radius, float vr){
     super(v);
     this.radius = radius;
+    this.vr = vr;
     init();
   }
 
@@ -420,9 +423,10 @@ class Octahedron extends Shape3D{
     init();
   }
 
-  Octahedron(PVector v, float radius){
+  Octahedron(PVector v, float radius, float vr){
     super(v);
     this.radius = radius;
+    this.vr = vr;
     init();
   }
 
@@ -491,9 +495,10 @@ class Dodecahedron extends Shape3D{
     init();
   }
 
-  Dodecahedron(PVector v, float radius){
+  Dodecahedron(PVector v, float radius, float vr){
     super(v);
     this.radius = radius;
+    this.vr = vr;
     init();
   }
 
