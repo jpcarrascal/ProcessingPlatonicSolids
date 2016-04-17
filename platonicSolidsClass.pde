@@ -1,97 +1,27 @@
-class Dimension3D{
-   float w, h, d;
-   
-   Dimension3D(float w, float h, float d){
-     this.w=w;
-     this.h=h;
-     this.d=d;
-  }
-}
-
-abstract class Shape3D{
+abstract class PlatonicSolid{
   float x, y, z;
-  float w, h, d;
+  float radius;
+  float vertexRadius;
+  boolean showFaces;
+  int currentColor;
 
-  Shape3D(){
+  PlatonicSolid(){
+  }
+  
+  PlatonicSolid(float radius, float vertexRadius, boolean showFaces){
+    this.radius = radius;
+    this.vertexRadius = vertexRadius;
+    this.showFaces = showFaces;
+    init();
   }
 
-  Shape3D(float x, float y, float z){
-    this.x = x;
-    this.y = y;
-    this.z = z;
-  }
-
-  Shape3D(PVector p){
-    x = p.x;
-    y = p.y;
-    z = p.z;
-  }
-
-
-  Shape3D(Dimension3D dim){
-    w = dim.w;
-    h = dim.h;
-    d = dim.d;
-  }
-
-  Shape3D(float x, float y, float z, float w, float h, float d){
-    this.x = x;
-    this.y = y;
-    this.z = z;
-    this.w = w;
-    this.h = h;
-    this.d = d;
-  }
-
-  Shape3D(float x, float y, float z, Dimension3D dim){
-    this.x = x;
-    this.y = y;
-    this.z = z;
-    w = dim.w;
-    h = dim.h;
-    d = dim.d;
-  }
-
-  Shape3D(PVector p, Dimension3D dim){
-    x = p.x;
-    y = p.y;
-    z = p.z;
-    w = dim.w;
-    h = dim.h;
-    d = dim.d;
-  }
-
-  void locSphere(float x, float y, float z, float r)
+  void vertexSphere(float x, float y, float z, float r)
   {
     pushMatrix();
     translate(x,y,z);
     sphere(r);
     popMatrix();
   }
-
-  void setLoc(PVector p){
-    x=p.x;
-    y=p.y;
-    z=p.z;
-  }
-
-  void setLoc(float x, float y, float z){
-    this.x=x;
-    this.y=y;
-    this.z=z;
-  }
-
-
-  // override if you need these
-  void rotX(float theta){
-  }
-
-  void rotY(float theta){
-  }
-
-  void rotZ(float theta){
-  }
-
 
   // must be implemented in subclasses
   abstract void init();
@@ -101,32 +31,40 @@ abstract class Shape3D{
 
 
 
-class Icosahedron extends Shape3D{
+class Icosahedron extends PlatonicSolid{
 
   // icosahedron
   PVector topPoint;
   PVector[] topPent = new PVector[5];
   PVector bottomPoint;
   PVector[] bottomPent = new PVector[5];
-  float angle = 0, radius = 150;
+  float angle = 0;
   float triDist;
   float triHt;
-  float a, b, c, vr;
+  float a, b, c;
 
   // constructor
-  Icosahedron(float radius, float vr){
+  Icosahedron(float radius, float vertexRadius, boolean showFaces){
     this.radius = radius;
-    this.vr = vr;
+    this.vertexRadius = vertexRadius;
+    this.showFaces = showFaces;
     init();
   }
 
-  Icosahedron(PVector v, float radius, float vr){
-    super(v);
+  Icosahedron(float radius, float vertexRadius){
     this.radius = radius;
-    this.vr = vr;
+    this.vertexRadius = vertexRadius;
+    this.showFaces = true;
     init();
   }
 
+  Icosahedron(float radius){
+    this.radius = radius;
+    this.vertexRadius = 0;
+    this.showFaces = true;
+    init();
+  }
+  
   // calculate geometry
   void init(){
     c = dist(cos(0)*radius, sin(0)*radius, cos(radians(72))*radius,  sin(radians(72))*radius);
@@ -150,6 +88,11 @@ class Icosahedron extends Shape3D{
 
   // draws icosahedron 
   void create(){
+    if(!showFaces)
+    {
+      currentColor = g.fillColor;
+      fill(0,0,0,0);
+    }
     for (int i=0; i<topPent.length; i++){
       // icosahedron top
       beginShape();
@@ -222,77 +165,53 @@ class Icosahedron extends Shape3D{
         endShape(CLOSE);
       }
     }
-    
+    if(!showFaces)
+    {
+      fill(currentColor);
+    }
     // vertexes
-    if(vr > 0)
+    if(vertexRadius > 0)
     {
       for(int i=0;i<5;i++)
       {
-        locSphere(topPent[i].x,topPent[i].y,topPent[i].z,vr);
-        locSphere(bottomPent[i].x,bottomPent[i].y,bottomPent[i].z,vr);
+        vertexSphere(topPent[i].x,topPent[i].y,topPent[i].z,vertexRadius);
+        vertexSphere(bottomPent[i].x,bottomPent[i].y,bottomPent[i].z,vertexRadius);
       }
-      locSphere(topPoint.x,topPoint.y,topPoint.z,vr);
-      locSphere(bottomPoint.x,bottomPoint.y,bottomPoint.z,vr);
+      vertexSphere(topPoint.x,topPoint.y,topPoint.z,vertexRadius);
+      vertexSphere(bottomPoint.x,bottomPoint.y,bottomPoint.z,vertexRadius);
     }
   }
-
-  // overrided methods fom Shape3D
-  void rotZ(float theta){
-    float tx=0, ty=0, tz=0;
-    // top point
-    tx = cos(theta)*topPoint.x+sin(theta)*topPoint.y;
-    ty = sin(theta)*topPoint.x-cos(theta)*topPoint.y;
-    topPoint.x = tx;
-    topPoint.y = ty;
-
-    // bottom point
-    tx = cos(theta)*bottomPoint.x+sin(theta)*bottomPoint.y;
-    ty = sin(theta)*bottomPoint.x-cos(theta)*bottomPoint.y;
-    bottomPoint.x = tx;
-    bottomPoint.y = ty;
-
-    // top and bottom pentagons
-    for (int i=0; i<topPent.length; i++){
-      tx = cos(theta)*topPent[i].x+sin(theta)*topPent[i].y;
-      ty = sin(theta)*topPent[i].x-cos(theta)*topPent[i].y;
-      topPent[i].x = tx;
-      topPent[i].y = ty;
-
-      tx = cos(theta)*bottomPent[i].x+sin(theta)*bottomPent[i].y;
-      ty = sin(theta)*bottomPent[i].x-cos(theta)*bottomPent[i].y;
-      bottomPent[i].x = tx;
-      bottomPent[i].y = ty;
-    }
-  }
-
-  void rotX(float theta){
-  }
-
-  void rotY(float theta){
-  }
-
 
 }
 
 
-class Tetrahedron extends Shape3D{
+class Tetrahedron extends PlatonicSolid{
 
   // Tetrahedron
   float radius = 150;
-  float a,vr;
+  float a;
   PVector[] vert = new PVector[4];
   int[][] faces;
+  
   // constructor
-  Tetrahedron(float radius, float vr){
+  Tetrahedron(float radius, float vertexRadius, boolean showFaces){
     this.radius = radius;
-    this.vr = vr;
+    this.vertexRadius = vertexRadius;
+    this.showFaces = showFaces;
     init();
   }
 
-  Tetrahedron(PVector v, float radius, float vr){
-    super(v);
+  Tetrahedron(float radius, float vertexRadius){
     this.radius = radius;
-    this.vr = vr;
+    this.vertexRadius = vertexRadius;
+    this.showFaces = true;
+    init();
+  }
+
+  Tetrahedron(float radius){
+    this.radius = radius;
+    this.vertexRadius = 0;
+    this.showFaces = true;
     init();
   }
 
@@ -306,7 +225,12 @@ class Tetrahedron extends Shape3D{
   }
 
   // draws tetrahedron 
-  void create(){    
+  void create(){
+    if(!showFaces)
+    {
+      currentColor = g.fillColor;
+      fill(0,0,0,0);
+    }
     beginShape(TRIANGLE_STRIP);
     vertex(vert[0].x,vert[0].y,vert[0].z);  // vertex 1
     vertex(vert[1].x,vert[1].y,vert[1].z);    // vertex 2
@@ -318,12 +242,16 @@ class Tetrahedron extends Shape3D{
     vertex(vert[2].x,vert[2].y,vert[2].z);  // vertex 3
     vertex(vert[1].x,vert[1].y,vert[1].z);    // vertex 2
     endShape(CLOSE);
-
+    if(!showFaces)
+    {
+      fill(currentColor);
+    }
+    
     // vertexes
-    if(vr > 0)
+    if(vertexRadius > 0)
     {
       for(int i=0;i<4;i++)
-        locSphere(vert[i].x,vert[i].y,vert[i].z,vr);
+        vertexSphere(vert[i].x,vert[i].y,vert[i].z,vertexRadius);
     }
   }
 
@@ -337,24 +265,33 @@ class Tetrahedron extends Shape3D{
   }
 }
 
-class Hexahedron extends Shape3D{
+class Hexahedron extends PlatonicSolid{
 
   // Tetrahedron
   float radius = 150;
-  float a,vr;
+  float a;
   PVector[] vert = new PVector[8];
   int[][] faces;
+  
   // constructor
-  Hexahedron(float radius, float vr){
+  Hexahedron(float radius, float vertexRadius, boolean showFaces){
     this.radius = radius;
-    this.vr = vr;
+    this.vertexRadius = vertexRadius;
+    this.showFaces = showFaces;
+    init();
+  }
+  
+  Hexahedron(float radius, float vertexRadius){
+    this.radius = radius;
+    this.vertexRadius = vertexRadius;
+    this.showFaces = true;
     init();
   }
 
-  Hexahedron(PVector v, float radius, float vr){
-    super(v);
+  Hexahedron(float radius){
     this.radius = radius;
-    this.vr = vr;
+    this.vertexRadius = 0;
+    this.showFaces = true;
     init();
   }
 
@@ -380,7 +317,13 @@ class Hexahedron extends Shape3D{
   }
 
   // draws hexahedron 
-  void create(){    
+  void create(){  
+    if(!showFaces)
+    {
+      currentColor = g.fillColor;
+      fill(0,0,0,0);
+    }
+    
     for(int i=0; i<6; i++)
     {
       beginShape();
@@ -391,11 +334,16 @@ class Hexahedron extends Shape3D{
       endShape();
     }
 
+    if(!showFaces)
+    {
+      fill(currentColor);
+    }
+    
     // vertexes
-    if(vr > 0)
+    if(vertexRadius > 0)
     {
       for(int i=0;i<8;i++)
-        locSphere(vert[i].x,vert[i].y,vert[i].z,vr);
+        vertexSphere(vert[i].x,vert[i].y,vert[i].z,vertexRadius);
     }
   }
 
@@ -409,24 +357,33 @@ class Hexahedron extends Shape3D{
   }
 }
 
-class Octahedron extends Shape3D{
+class Octahedron extends PlatonicSolid{
 
   // Octahedron
   float radius = 150;
-  float a,vr;
+  float a;
   PVector[] vert = new PVector[6];
   int[][] faces;
+
   // constructor
-  Octahedron(float radius, float vr){
+  Octahedron(float radius, float vertexRadius, boolean showFaces){
     this.radius = radius;
-    this.vr = vr;
+    this.vertexRadius = vertexRadius;
+    this.showFaces = showFaces;
     init();
   }
 
-  Octahedron(PVector v, float radius, float vr){
-    super(v);
+  Octahedron(float radius, float vertexRadius){
     this.radius = radius;
-    this.vr = vr;
+    this.vertexRadius = vertexRadius;
+    this.showFaces = true;
+    init();
+  }
+
+  Octahedron(float radius){
+    this.radius = radius;
+    this.vertexRadius = 0;
+    this.showFaces = true;
     init();
   }
 
@@ -443,6 +400,12 @@ class Octahedron extends Shape3D{
 
   // draws octahedron 
   void create(){
+    if(!showFaces)
+    {
+      currentColor = g.fillColor;
+      fill(0,0,0,0);
+    }
+
     beginShape(TRIANGLE_FAN); 
     vertex(vert[4].x,vert[4].y,vert[4].z);
     vertex(vert[0].x,vert[0].y,vert[0].z);
@@ -460,45 +423,49 @@ class Octahedron extends Shape3D{
     vertex(vert[5].x,vert[5].y,vert[5].z);
     vertex(vert[0].x,vert[0].y,vert[0].z);
     endShape();
-    
+
+    if(!showFaces)
+    {
+      fill(currentColor);
+    }
+
     // vertexes
-    if(vr > 0)
+    if(vertexRadius > 0)
     {
       for(int i=0;i<6;i++)
-        locSphere(vert[i].x,vert[i].y,vert[i].z,vr);
+        vertexSphere(vert[i].x,vert[i].y,vert[i].z,vertexRadius);
     }
   }
 
-  void rotZ(float theta){
-  }
-
-  void rotX(float theta){
-  }
-
-  void rotY(float theta){
-  }
-
-
 }
 
-class Dodecahedron extends Shape3D{
+class Dodecahedron extends PlatonicSolid{
 
   // Dodecahedron
   float radius = 150;
-  float a,b,c,vr;
+  float a,b,c;
   PVector[] vert;
   int[][] faces;
+  
   // constructor
-  Dodecahedron(float radius, float vr){
+  Dodecahedron(float radius, float vertexRadius, boolean showFaces){
     this.radius = radius;
-    this.vr = vr;
+    this.vertexRadius = vertexRadius;
+    this.showFaces = showFaces;
+    init();
+  }
+  
+  Dodecahedron(float radius, float vertexRadius){
+    this.radius = radius;
+    this.vertexRadius = vertexRadius;
+    this.showFaces = true;
     init();
   }
 
-  Dodecahedron(PVector v, float radius, float vr){
-    super(v);
+  Dodecahedron(float radius){
     this.radius = radius;
-    this.vr = vr;
+    this.vertexRadius = 0;
+    this.showFaces = true;
     init();
   }
 
@@ -546,7 +513,12 @@ class Dodecahedron extends Shape3D{
 
   // draws dodecahedron 
   void create(){
-
+    if(!showFaces)
+    {
+      currentColor = g.fillColor;
+      fill(0,0,0,0);
+    }
+    
     for(int i=0; i<12; i++)
     {
       beginShape();
@@ -557,20 +529,16 @@ class Dodecahedron extends Shape3D{
       endShape();
     }
 
+    if(!showFaces)
+    {
+      fill(currentColor);
+    }
     // vertexes
-    if(vr > 0)
+    if(vertexRadius > 0)
     {
       for(int i=0;i<20;i++)
-        locSphere(vert[i].x,vert[i].y,vert[i].z,vr);
+        vertexSphere(vert[i].x,vert[i].y,vert[i].z,vertexRadius);
     }
   }
 
-  void rotZ(float theta){
-  }
-
-  void rotX(float theta){
-  }
-
-  void rotY(float theta){
-  }
 }
