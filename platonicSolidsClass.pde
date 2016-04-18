@@ -59,6 +59,18 @@ class Icosahedron {
 
   // draws icosahedron 
   void create(){
+    // vertexes
+    if(vertexRadius > 0)
+    {
+      for(int i=0;i<5;i++)
+      {
+        vertexSphere(topPent[i].x,topPent[i].y,topPent[i].z,vertexRadius);
+        vertexSphere(bottomPent[i].x,bottomPent[i].y,bottomPent[i].z,vertexRadius);
+      }
+      vertexSphere(topPoint.x,topPoint.y,topPoint.z,vertexRadius);
+      vertexSphere(bottomPoint.x,bottomPoint.y,bottomPoint.z,vertexRadius);
+    }
+    
     if(!showFaces)
     {
       currentColor = g.fillColor;
@@ -140,17 +152,7 @@ class Icosahedron {
     {
       fill(currentColor);
     }
-    // vertexes
-    if(vertexRadius > 0)
-    {
-      for(int i=0;i<5;i++)
-      {
-        vertexSphere(topPent[i].x,topPent[i].y,topPent[i].z,vertexRadius);
-        vertexSphere(bottomPent[i].x,bottomPent[i].y,bottomPent[i].z,vertexRadius);
-      }
-      vertexSphere(topPoint.x,topPoint.y,topPoint.z,vertexRadius);
-      vertexSphere(bottomPoint.x,bottomPoint.y,bottomPoint.z,vertexRadius);
-    }
+
   }
 
   void vertexSphere(float x, float y, float z, float r)
@@ -209,6 +211,13 @@ class Tetrahedron{
 
   // draws tetrahedron 
   void create(){
+    // vertexes
+    if(vertexRadius > 0)
+    {
+      for(int i=0;i<4;i++)
+        vertexSphere(vert[i].x,vert[i].y,vert[i].z,vertexRadius);
+    }
+
     if(!showFaces)
     {
       currentColor = g.fillColor;
@@ -229,13 +238,7 @@ class Tetrahedron{
     {
       fill(currentColor);
     }
-    
-    // vertexes
-    if(vertexRadius > 0)
-    {
-      for(int i=0;i<4;i++)
-        vertexSphere(vert[i].x,vert[i].y,vert[i].z,vertexRadius);
-    }
+
   }
 
   void vertexSphere(float x, float y, float z, float r)
@@ -304,7 +307,14 @@ class Hexahedron{
   }
 
   // draws hexahedron 
-  void create(){  
+  void create(){ 
+    // vertexes
+    if(vertexRadius > 0)
+    {
+      for(int i=0;i<8;i++)
+        vertexSphere(vert[i].x,vert[i].y,vert[i].z,vertexRadius);
+    }
+    
     if(!showFaces)
     {
       currentColor = g.fillColor;
@@ -325,13 +335,7 @@ class Hexahedron{
     {
       fill(currentColor);
     }
-    
-    // vertexes
-    if(vertexRadius > 0)
-    {
-      for(int i=0;i<8;i++)
-        vertexSphere(vert[i].x,vert[i].y,vert[i].z,vertexRadius);
-    }
+
   }
 
   void vertexSphere(float x, float y, float z, float r)
@@ -391,6 +395,13 @@ class Octahedron{
 
   // draws octahedron 
   void create(){
+    // vertexes
+    if(vertexRadius > 0)
+    {
+      for(int i=0;i<6;i++)
+        vertexSphere(vert[i].x,vert[i].y,vert[i].z,vertexRadius);
+    }
+    
     if(!showFaces)
     {
       currentColor = g.fillColor;
@@ -420,12 +431,6 @@ class Octahedron{
       fill(currentColor);
     }
 
-    // vertexes
-    if(vertexRadius > 0)
-    {
-      for(int i=0;i<6;i++)
-        vertexSphere(vert[i].x,vert[i].y,vert[i].z,vertexRadius);
-    }
   }
 
   void vertexSphere(float x, float y, float z, float r)
@@ -516,6 +521,13 @@ class Dodecahedron{
 
   // draws dodecahedron 
   void create(){
+    // vertexes
+    if(vertexRadius > 0)
+    {
+      for(int i=0;i<20;i++)
+        vertexSphere(vert[i].x,vert[i].y,vert[i].z,vertexRadius);
+    }
+    
     if(!showFaces)
     {
       currentColor = g.fillColor;
@@ -536,12 +548,7 @@ class Dodecahedron{
     {
       fill(currentColor);
     }
-    // vertexes
-    if(vertexRadius > 0)
-    {
-      for(int i=0;i<20;i++)
-        vertexSphere(vert[i].x,vert[i].y,vert[i].z,vertexRadius);
-    }
+
   }
 
   void vertexSphere(float x, float y, float z, float r)
